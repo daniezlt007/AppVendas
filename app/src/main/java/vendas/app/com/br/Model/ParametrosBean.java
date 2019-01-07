@@ -8,18 +8,22 @@ public class ParametrosBean {
     private String mParamsEndIpServer;
     private String mParamsEstoqueNegativo;
     private Integer mParamsDescontoVendedor;
+    private String mParamsLogin;
+    private String mParamsSenha;
 
     public ParametrosBean() {
 
     }
 
-    public ParametrosBean(Integer mParamsUsuCodigo, String mParamsImportarCliente, String mParamsEndIpLocal, String mParamsEndIpServer, String mParamsEstoqueNegativo, Integer mParamsDescontoVendedor) {
+    public ParametrosBean(Integer mParamsUsuCodigo, String mParamsImportarCliente, String mParamsEndIpLocal, String mParamsEndIpServer, String mParamsEstoqueNegativo, Integer mParamsDescontoVendedor, String mParamsLogin, String mParamsSenha) {
         this.mParamsUsuCodigo = mParamsUsuCodigo;
         this.mParamsImportarCliente = mParamsImportarCliente;
         this.mParamsEndIpLocal = mParamsEndIpLocal;
         this.mParamsEndIpServer = mParamsEndIpServer;
         this.mParamsEstoqueNegativo = mParamsEstoqueNegativo;
         this.mParamsDescontoVendedor = mParamsDescontoVendedor;
+        this.mParamsLogin = mParamsLogin;
+        this.mParamsSenha = mParamsSenha;
     }
 
     public Integer getmParamsUsuCodigo() {
@@ -68,5 +72,21 @@ public class ParametrosBean {
 
     public void setmParamsDescontoVendedor(Integer mParamsDescontoVendedor) {
         this.mParamsDescontoVendedor = mParamsDescontoVendedor;
+    }
+
+    public String getmParamsLogin() {
+        return mParamsLogin;
+    }
+
+    public void setmParamsLogin(String mParamsLogin) {
+        this.mParamsLogin = mParamsLogin;
+    }
+
+    public String getmParamsSenha() {
+        return mParamsSenha;
+    }
+
+    public void setmParamsSenha(String mParamsSenha) {
+        this.mParamsSenha = mParamsSenha;
     }
 }

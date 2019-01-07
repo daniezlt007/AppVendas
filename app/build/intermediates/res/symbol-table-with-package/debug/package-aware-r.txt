@@ -669,6 +669,7 @@ id barrier
 id beginning
 id blocking
 id bottom
+id btnLogin
 id buttonPanel
 id center
 id center_horizontal
@@ -772,6 +773,8 @@ id titleDividerNoCustom
 id title_template
 id top
 id topPanel
+id txtSenha
+id txtUsuario
 id uniform
 id up
 id useLogo
@@ -810,6 +813,7 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout activity_login
 layout activity_main
 layout notification_action
 layout notification_action_tombstone
