@@ -1,5 +1,6 @@
 package vendas.app.com.br.Activitys;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -33,12 +36,16 @@ public class LoginActivity extends AppCompatActivity {
     private EditText txtLogin, txtSenha;
     private Button btnLogin;
     private RequestQueue requestQueue;
-    private static final String TAG_SUCESSO = "sucesso";
-    private static final String TAG_MENSAGEM = "mensagem";
     private ParametrosBean bean;
     private ParametrosDao dao;
-    private static final String TAG_REQUEST = "tag";
+    private JSONArray jsonArray = null;
 
+    private static final String TAG_REQUEST = "tag";
+    private static final String TAG_LOGIN_ACTIVITY = "LoginActivity";
+
+    private static final String TAG_SUCESSO = "sucesso";
+    private static final String TAG_MENSAGEM = "mensagem";
+    private static final String TAG_LOGIN_USUARIO_JSON_ARRAY = "LoginUsuario";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +54,10 @@ public class LoginActivity extends AppCompatActivity {
 
         bean = new ParametrosBean();
         dao = new ParametrosDao(getBaseContext());
+        requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
         txtLogin = findViewById(R.id.txtUsuario);
         txtSenha = findViewById(R.id.txtSenha);
-        requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
         btnLogin = findViewById(R.id.btnLogin);
 
@@ -63,7 +70,8 @@ public class LoginActivity extends AppCompatActivity {
                     bean = dao.buscarParametros();
                     if (bean != null) {
                         if (login.trim().equals(bean.getmParamsLogin()) && senha.trim().equals(bean.getmParamsSenha())) {
-
+                            //registrarNaWeb(login, senha);
+                            validarUsuarioOffLine(login, senha);
                         }
                     } else {
                         if (Util.checarConexaoInternet(LoginActivity.this)) {
@@ -82,23 +90,54 @@ public class LoginActivity extends AppCompatActivity {
 
     private void registrarNaWeb(String login, String senha) {
         map = new HashMap<>();
-        map.put("login", login);
-        map.put("senha", senha);
+        map.put("params_login", login);
+        map.put("params_senha", senha);
 
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(
                 Request.Method.POST,
-                Constantes.URL_REGISTRO,
+                Constantes.URL_BASE,
                 map,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        try {
+                            int sucesso = (Integer)response.get(TAG_SUCESSO);
+                            String mensagem = (String) response.get(TAG_MENSAGEM);
+                            switch (sucesso){
+                                case 1:
+                                    jsonArray = response.getJSONArray(TAG_LOGIN_USUARIO_JSON_ARRAY);
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                        bean = new ParametrosBean();
+                                        dao = new ParametrosDao(LoginActivity.this);
+                                        bean.setmParamsUsuCodigo(jsonObject.getInt("id"));
+                                        bean.setmParamsDescontoVendedor(jsonObject.getInt("desconto"));
+                                        bean.setmParamsLogin(jsonObject.getString("login"));
+                                        bean.setmParamsSenha(jsonObject.getString("senha"));
+                                        bean.setmParamsEndIpServer(Constantes.URL_BASE);
+                                        bean.setmParamsEndIpLocal("localhost");
+                                        bean.setmParamsImportarCliente("S");
+                                        bean.setmParamsEstoqueNegativo("N");
+                                        dao.gravarParametros(bean);
+                                    }
+                                    Toast.makeText(getBaseContext(), mensagem, Toast.LENGTH_LONG).show();
+                                    telaPrincipal();
+                                    break;
+                                case 2:
+                                    Toast.makeText(getBaseContext(), mensagem, Toast.LENGTH_LONG).show();
+                                    break;
+                            }
+
+                        } catch (JSONException e) {
+                            Util.msgError(TAG_LOGIN_ACTIVITY, e.getMessage());
+                        }
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Util.msgError(TAG_LOGIN_ACTIVITY, error.getMessage());
                     }
                 }
 
@@ -107,6 +146,22 @@ public class LoginActivity extends AppCompatActivity {
         request.setTag(TAG_REQUEST);
         requestQueue.add(request);
 
+    }
+
+    private void validarUsuarioOffLine(String login, String senha){
+        bean = dao.buscarParametros();
+        if (login.trim().equals(bean.getmParamsLogin()) && senha.trim().equals(bean.getmParamsSenha())) {
+            telaPrincipal();
+            Toast.makeText(this, "Seja bem vindo.", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(this, "Usuário e/ou senha incorretos", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void telaPrincipal() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public boolean validarCampos(String login, String senha) {
