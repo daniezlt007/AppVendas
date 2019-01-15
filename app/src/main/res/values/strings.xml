@@ -3,4 +3,26 @@
     <string name="str_login">Login</string>
     <string name="hint_senha">Senha</string>
     <string name="hint_usuario">Usuário</string>
+    <string name="codigo_vendedor">Código Vendedor</string>
+    <string name="txt_desconto">Desconto</string>
+
+    <string name="lblImporCliente">Parâmetro de Importação dos clientes da empresa</string>
+    <string name="lblServidor">Parâmetro de configuração do servidor</string>
+    <string name="lblDesconto">Desconto</string>
+    <string name="ckEstoqueNegativo">Trabalhar com estoque negativo ?</string>
+
+    <string name="rbSim">Importar todos os clientes da empresa ?</string>
+    <string name="rbNao">Importar apenas os clientes do vendedor ?</string>
+
+    <string name="endremoto">Endereço Remoto</string>
+    <string name="endlocal">Endereço Local</string>
+
+    <string name="rbendremoto">Usar servidor remoto</string>
+    <string name="rbendlocal">Usar servidor local</string>
+
+    <string name="btnSalvarParametro">Salvar</string>
+    <string name="title_activity_dashboard">Aplicativo de vendas - AppVendas</string>
+    <string name="btnreset">Reset</string>
+
+
 </resources>

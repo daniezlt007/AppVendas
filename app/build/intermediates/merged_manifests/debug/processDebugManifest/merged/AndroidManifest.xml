@@ -34,6 +34,7 @@
             </intent-filter>
         </activity>
         <activity android:name="vendas.app.com.br.Activitys.MainActivity" />
+        <activity android:name="vendas.app.com.br.Activitys.ParametrosActivity" />
     </application>
 
 </manifest>
