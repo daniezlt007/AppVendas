@@ -90,8 +90,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void registrarNaWeb(String login, String senha) {
         map = new HashMap<>();
-        map.put("params_login", login);
-        map.put("params_senha", senha);
+        map.put("login", login);
+        map.put("senha", senha);
 
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(
                 Request.Method.POST,
